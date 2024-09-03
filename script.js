@@ -62,10 +62,12 @@ function displayPokemons() {
         return;
     }
 
+    let resultatHtml = "";
     // Affiche le nom des Pokémons
     for (let pokemon of pokemonsTab) {
-        divContainer.innerHTML += `<p>${pokemon.name}</p>`;
+        resultatHtml += `<p>${pokemon.name}</p>`;
     }
+    divContainer.innerHTML = resultatHtml;
 }
 
 displayPokemons();
