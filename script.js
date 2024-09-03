@@ -59,6 +59,7 @@ function displayPokemons() {
 
     if (pokemonsTab.length === 0) {
         divContainer.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
+        return;
     }
 
     // Affiche le nom des Pokémons
