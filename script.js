@@ -1,7 +1,7 @@
 /**
  * Exercice : Mini Pokédex
- * @author Steve Fallet <steve.fallet@dvitec.ch>
- * @since 2024-09-01
+ * @author Drici Rédouane <steve.fallet@dvitec.ch>
+ * @since 2024-09-03
  */
 
 'use strict';
@@ -28,7 +28,7 @@ const typeColors = {
 };
 
 // Tableau d'objets représentant les Pokémon
-const pokemons = [
+const pokemonsTab = [
     { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
     { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
     { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
@@ -47,3 +47,24 @@ const pokemons = [
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
+
+/**
+ * Affiche les pokémons du tableau
+ */
+function displayPokemons() {
+    const divContainer = document.querySelector('.pokemon-container');
+
+    // Vide le container
+    divContainer.innerHTML = "";
+
+    if (pokemonsTab.length === 0) {
+        divContainer.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
+    }
+
+    // Affiche le nom des Pokémons
+    for (let pokemon of pokemonsTab) {
+        divContainer.innerHTML += `<p>${pokemon.name}</p>`;
+    }
+}
+
+displayPokemons();
