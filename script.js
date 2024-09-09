@@ -1,7 +1,7 @@
 /**
  * Exercice : Mini Pokédex
- * @author Drici Rédouane <steve.fallet@dvitec.ch>
- * @since 2024-09-03
+ * @author Drici Rédouane <redouane.drici@divtec.ch>
+ * @since 2024-09-09
  */
 
 'use strict';
@@ -48,6 +48,20 @@ const pokemonsTab = [
     {name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png'}
 ];
 
+function generatePokemonCardHTML(pokemon) {
+    const types = pokemon.type.split(",").join(" / "); // Sépare les types par une virgule et un espace
+    return `
+        <div class="pokemon-container">
+            <div class="pokemon-card" style="background: #705898;">
+                <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
+                <h2 class="pokemon-name">${pokemon.name}</h2>
+                <div>Type: ${types}</div>
+                <div>Niveau: ${pokemon.level}</div>
+            </div>
+        </div>
+    `;
+}
+
 /**
  * Affiche les pokémons du tableau
  */
@@ -65,12 +79,7 @@ function displayPokemons() {
     // Affiche le nom des Pokémons avec leurs types
     for (let pokemon of pokemonsTab) {
         let typesTab = pokemon.type.split(",");
-        resultatHtml += `<p>${pokemon.name}`;
-
-        for (let type of typesTab) {
-            resultatHtml += ` <small>${type.trim()}</small>`;
-        }
-        resultatHtml += `</p>`;
+        resultatHtml += generatePokemonCardHTML(pokemon);
     }
 
     divContainer.innerHTML = resultatHtml;
