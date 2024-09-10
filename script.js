@@ -48,13 +48,19 @@ const pokemonsTab = [
     {name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png'}
 ];
 
+/**
+ * genere le html pour les cartes pokemon
+ * @param pokemon les pokemons
+ * @returns {string} le html des cartes pokemon
+ */
 function generatePokemonCardHTML(pokemon) {
-    const types = pokemon.type.split(",").join(" / "); // Sépare les types par une virgule et un espace
+    const types = pokemon.type.split(",").join(" / ");
+
     return `
         <div class="pokemon-container">
             <div class="pokemon-card" style="background: #705898;">
                 <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
-                <h2 class="pokemon-name">${pokemon.name}</h2>
+                <h2>${pokemon.name}</h2>
                 <div>Type: ${types}</div>
                 <div>Niveau: ${pokemon.level}</div>
             </div>
