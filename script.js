@@ -54,14 +54,13 @@ const pokemonsTab = [
  * @returns {string} le html des cartes pokemon
  */
 function generatePokemonCardHTML(pokemon) {
-    const types = pokemon.type.split(",").join(" / ");
 
     return `
         <div class="pokemon-container">
             <div class="pokemon-card" style="background: #705898;">
                 <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
                 <h2>${pokemon.name}</h2>
-                <div>Type: ${types}</div>
+                <div>Type: ${pokemon.type.replace(',', ' / ')}</div>
                 <div>Niveau: ${pokemon.level}</div>
             </div>
         </div>
