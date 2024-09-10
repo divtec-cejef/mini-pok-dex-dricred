@@ -1,7 +1,7 @@
 /**
  * Exercice : Mini Pokédex
- * @author Drici Rédouane <steve.fallet@dvitec.ch>
- * @since 2024-09-03
+ * @author Steve Fallet <steve.fallet@dvitec.ch>
+ * @since 2024-09-01
  */
 
 'use strict';
@@ -29,51 +29,64 @@ const typeColors = {
 
 // Tableau d'objets représentant les Pokémon
 const pokemonsTab = [
-    {name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png'},
-    {name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png'},
-    {name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png'},
-    {name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png'},
-    {name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png'},
-    {name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png'},
-    {name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png'},
-    {name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png'},
-    {name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png'},
-    {name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png'},
-    {name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png'},
-    {name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png'},
-    {name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png'},
-    {name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png'},
-    {name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png'},
-    {name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png'},
-    {name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png'}
+    { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
+    { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
+    { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
+    { name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png' },
+    { name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png' },
+    { name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png' },
+    { name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png' },
+    { name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png' },
+    { name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png' },
+    { name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png' },
+    { name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png' },
+    { name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png' },
+    { name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png' },
+    { name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png' },
+    { name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png' },
+    { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
+    { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
 
 /**
- * Affiche les pokémons du tableau
+ * Affiche le nom des pokémons dans la <div class="pokemon-container">
  */
-function displayPokemons() {
+function displayPokemons () {
+    // Récupération de l'élément HTML <div class="pokemon-container">
     const divContainer = document.querySelector('.pokemon-container');
 
-    // Vide le container
-    divContainer.innerHTML = "";
+    // Vide le contenu du container
+    divContainer.innerHTML = '';
 
-    if (pokemonsTab.length === 0) {
-        divContainer.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
+    // Si tableau est vide, si la taille est de 0
+    if(!pokemonsTab.length) {
+        divContainer.innerHTML = "<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>";
+        return; // Sort de la fonction
     }
 
-    let resultatHtml = "";
-    // Affiche le nom des Pokémons avec leurs types
+    let resHTML = '';
+    // Pour chaque pokémon du tableau pokemons
     for (let pokemon of pokemonsTab) {
-        let typesTab = pokemon.type.split(",");
-        resultatHtml += `<p>${pokemon.name}`;
+        // Spliter les types
+        let tabTypes = pokemon.type.split(',');
+        console.log(tabTypes);
 
-        for (let type of typesTab) {
-            resultatHtml += ` <small>${type.trim()}</small>`;
+        // Ajoute à la fin (+=) un <p> avec le nom du Pokémon
+        if(tabTypes.length === 1){
+            resHTML += `<p>${pokemon.name} <small>${tabTypes[0]}</small></p>`;
+        } else if (tabTypes.length === 2) {
+            resHTML += `<p>
+                            ${pokemon.name}
+                            <small>${tabTypes[0]}</small>
+                            <small>${tabTypes[1]}</small>
+                        </p>`;
         }
-        resultatHtml += `</p>`;
     }
-
-    divContainer.innerHTML = resultatHtml;
+    // resHTML est créé pour n'appeler qu'une fois innerHTML
+    // innerHTML est très gourmand en traitements, car il analyse
+    // la chaine de caractères pour créer les éléments HTML
+    divContainer.innerHTML = resHTML;
 }
 
+// Appelle la fonction displayPokemons()
 displayPokemons();
