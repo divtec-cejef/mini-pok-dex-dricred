@@ -57,38 +57,50 @@ function generatePokemonCardHTML(pokemon) {
     const types = pokemon.type.split(",").join(" / ");
 
     return `
-        <div class="pokemon-container">
-            <div class="pokemon-card" style="background: #705898;">
-                <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
-                <h2>${pokemon.name}</h2>
-                <div>Type: ${types}</div>
-                <div>Niveau: ${pokemon.level}</div>
-            </div>
+        <div class="pokemon-card" style="background: #705898;">
+            <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
+            <h2>${pokemon.name}</h2>
+            <div>Type: ${types}</div>
+            <div>Niveau: ${pokemon.level}</div>
         </div> 
     `;
 }
 
 /**
  * Affiche les pokémons du tableau
+ * @param {Array} filteredPokemons - Les pokémons filtrés
  */
-function displayPokemons() {
+function displayPokemons(filteredPokemons = pokemonsTab) {
     const divContainer = document.querySelector('.pokemon-container');
 
-    // Vide le container
     divContainer.innerHTML = "";
 
-    if (pokemonsTab.length === 0) {
+    if (filteredPokemons.length === 0) {
         divContainer.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
+        return;
     }
 
     let resultatHtml = "";
-    // Affiche le nom des Pokémons avec leurs types
-    for (let pokemon of pokemonsTab) {
-        let typesTab = pokemon.type.split(",");
+    for (let pokemon of filteredPokemons) {
         resultatHtml += generatePokemonCardHTML(pokemon);
     }
 
     divContainer.innerHTML = resultatHtml;
 }
+
+/**
+ * Filtre les pokémons par nom en fonction de la recherche
+ */
+function filterAndSortPokemons() {
+    const searchBar = document.querySelector('#search-bar');
+    const searchValue = searchBar.value.toLowerCase();
+    const filteredPokemons = pokemonsTab.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchValue)
+    );
+
+    displayPokemons(filteredPokemons);
+}
+
+document.querySelector('#search-bar').addEventListener('input', filterAndSortPokemons);
 
 displayPokemons();
