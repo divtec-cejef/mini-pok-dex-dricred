@@ -64,7 +64,7 @@ function generatePokemonCardHTML(pokemon) {
                 <div>Type: ${types}</div>
                 <div>Niveau: ${pokemon.level}</div>
             </div>
-        </div>
+        </div> 
     `;
 }
 
