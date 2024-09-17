@@ -1,7 +1,7 @@
 /**
  * Exercice : Mini Pokédex
- * @author Drici Rédouane <redouane.drici@divtec.ch>
- * @since 2024-09-09
+ * @author Steve Fallet <steve.fallet@dvitec.ch>
+ * @since 2024-09-01
  */
 
 'use strict';
@@ -28,79 +28,87 @@ const typeColors = {
 };
 
 // Tableau d'objets représentant les Pokémon
-const pokemonsTab = [
-    {name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png'},
-    {name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png'},
-    {name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png'},
-    {name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png'},
-    {name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png'},
-    {name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png'},
-    {name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png'},
-    {name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png'},
-    {name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png'},
-    {name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png'},
-    {name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png'},
-    {name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png'},
-    {name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png'},
-    {name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png'},
-    {name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png'},
-    {name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png'},
-    {name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png'}
+const pokemons = [
+    { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
+    { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
+    { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
+    { name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png' },
+    { name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png' },
+    { name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png' },
+    { name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png' },
+    { name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png' },
+    { name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png' },
+    { name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png' },
+    { name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png' },
+    { name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png' },
+    { name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png' },
+    { name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png' },
+    { name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png' },
+    { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
+    { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
 
+const container = document.querySelector('.pokemon-container');
+const searchBar = document.getElementById('search-bar');
+
 /**
- * genere le html pour les cartes pokemon
- * @param pokemon les pokemons
- * @returns {string} le html des cartes pokemon
+ * Génère le HTML pour un Pokémon
+ * @param {Object} pokemon - Un objet Pokémon avec les propriétés name, type, level, img
+ * @returns {string} - Le HTML de la carte Pokémon
  */
-function generatePokemonCardHTML(pokemon) {
-    const types = pokemon.type.split(",").join(" / ");
+function generatePokemonCardHTML({ name, type, level, img }) {
+    const types = type.split(',');
+    let bgColor;
+
+    if (types.length === 2) {
+        const color1 = typeColors[types[0].trim()] || DEFAULT_COLOR;
+        const color2 = typeColors[types[1].trim()] || DEFAULT_COLOR;
+        bgColor = `linear-gradient(to right, ${color1} 50%, ${color2} 50%)`;
+    } else {
+        bgColor = typeColors[types[0].trim()] || DEFAULT_COLOR;
+    }
+
+    const imgPath = `images/${img}`;
 
     return `
-        <div class="pokemon-card" style="background: #705898;">
-            <img src="images/${pokemon.img}" alt="${pokemon.name}" class="pokemon-image">
-            <h2>${pokemon.name}</h2>
-            <div>Type: ${types}</div>
-            <div>Niveau: ${pokemon.level}</div>
-        </div> 
+        <div class="pokemon-card" style="background: ${bgColor};">
+            <img src="${imgPath}" alt="${name}">
+            <h2>${name}</h2>
+            <div>Type: ${types.join(' / ')}</div>
+            <div>Niveau: ${level}</div>
+        </div>
     `;
 }
 
 /**
- * Affiche les pokémons du tableau
- * @param {Array} filteredPokemons - Les pokémons filtrés
+ * Affiche les Pokémon dans le conteneur spécifié.
+ * @param {Array<Object>} pokemons - Tableau d'objets représentant les Pokémon.
  */
-function displayPokemons(filteredPokemons = pokemonsTab) {
-    const divContainer = document.querySelector('.pokemon-container');
-
-    divContainer.innerHTML = "";
-
-    if (filteredPokemons.length === 0) {
-        divContainer.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
+function displayPokemons(pokemons) {
+    if (pokemons.length === 0) {
+        container.innerHTML = `<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>`;
         return;
     }
 
-    let resultatHtml = "";
-    for (let pokemon of filteredPokemons) {
-        resultatHtml += generatePokemonCardHTML(pokemon);
-    }
+    let result = ''; // Variable pour stocker le HTML généré
 
-    divContainer.innerHTML = resultatHtml;
+    for (const pokemon of pokemons) {
+        result += generatePokemonCardHTML(pokemon);
+    }
+    container.innerHTML = result;
 }
 
 /**
- * Filtre les pokémons par nom en fonction de la recherche
+ * Filtre et trie les Pokémon selon les critères de recherche, de type et d'ordre de tri
  */
 function filterAndSortPokemons() {
-    const searchBar = document.querySelector('#search-bar');
-    const searchValue = searchBar.value.toLowerCase();
-    const filteredPokemons = pokemonsTab.filter(pokemon =>
-        pokemon.name.toLowerCase().includes(searchValue)
-    );
+    const searchQuery = searchBar.value.toLowerCase();
+
+    let filteredPokemons = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(searchQuery));
 
     displayPokemons(filteredPokemons);
 }
 
-document.querySelector('#search-bar').addEventListener('input', filterAndSortPokemons);
+searchBar.addEventListener('input', filterAndSortPokemons);
 
-displayPokemons();
+filterAndSortPokemons();
