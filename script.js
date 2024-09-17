@@ -29,34 +29,37 @@ const typeColors = {
 
 // Tableau d'objets représentant les Pokémon
 const pokemons = [
-    { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
-    { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
-    { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
-    { name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png' },
-    { name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png' },
-    { name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png' },
-    { name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png' },
-    { name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png' },
-    { name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png' },
-    { name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png' },
-    { name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png' },
-    { name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png' },
-    { name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png' },
-    { name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png' },
-    { name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png' },
-    { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
-    { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
+    {name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png'},
+    {name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png'},
+    {name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png'},
+    {name: 'Carapuce', type: 'Eau', level: 10, img: 'carapuce.png'},
+    {name: 'Rondoudou', type: 'Normal,Fée', level: 25, img: 'rondoudou.png'},
+    {name: 'Ectoplasma', type: 'Spectre,Poison', level: 45, img: 'ectoplasma.png'},
+    {name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png'},
+    {name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png'},
+    {name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png'},
+    {name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png'},
+    {name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png'},
+    {name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png'},
+    {name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png'},
+    {name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png'},
+    {name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png'},
+    {name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png'},
+    {name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png'}
 ];
 
+// Stockage des références aux éléments HTML
 const container = document.querySelector('.pokemon-container');
 const searchBar = document.getElementById('search-bar');
+const typeFilter = document.getElementById('type-filter');
+const selectOrder = document.getElementById('sort-order');
 
 /**
  * Génère le HTML pour un Pokémon
  * @param {Object} pokemon - Un objet Pokémon avec les propriétés name, type, level, img
  * @returns {string} - Le HTML de la carte Pokémon
  */
-function generatePokemonCardHTML({ name, type, level, img }) {
+function generatePokemonCardHTML({name, type, level, img}) {
     const types = type.split(',');
     let bgColor;
 
@@ -95,6 +98,7 @@ function displayPokemons(pokemons) {
     for (const pokemon of pokemons) {
         result += generatePokemonCardHTML(pokemon);
     }
+
     container.innerHTML = result;
 }
 
@@ -103,12 +107,30 @@ function displayPokemons(pokemons) {
  */
 function filterAndSortPokemons() {
     const searchQuery = searchBar.value.toLowerCase();
+    const selectedType = typeFilter.value;
 
-    let filteredPokemons = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(searchQuery));
+    let resultat = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(searchQuery));
+    resultat = resultat.filter(pokemon => selectedType === "" || pokemon.type.includes(selectedType));
 
-    displayPokemons(filteredPokemons);
+    switch (selectOrder.value) {
+        case 'level-asc':
+            resultat.sort((a, b) => a.level - b.level);
+            break;
+        case 'level-desc':
+            resultat.sort((a, b) => b.level - a.level);
+            break;
+        case 'name-desc': resultat.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        default:
+            resultat.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    displayPokemons(resultat);
 }
 
+// Ajout des gestionnaires d'événements
 searchBar.addEventListener('input', filterAndSortPokemons);
+typeFilter.addEventListener('change', filterAndSortPokemons);
+selectOrder.addEventListener('change', filterAndSortPokemons);
 
 filterAndSortPokemons();
